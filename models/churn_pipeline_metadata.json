@@ -1,0 +1,170 @@
+{
+  "model_name": "XGBoost (Weighted)",
+  "algorithm": "XGBClassifier",
+  "created_at": "2026-11-16T15:16:27.366187+00:00",
+  "random_state": 42,
+  "selected_threshold": 0.54,
+  "default_threshold": 0.5,
+  "dataset_provenance": {
+    "source_url": "https://www.kaggle.com/datasets/blastchar/telco-customer-churn",
+    "filepath": "D:\\webProjects\\adi\\new\\data\\raw\\WA_Fn-UseC_-Telco-Customer-Churn.csv",
+    "filename": "WA_Fn-UseC_-Telco-Customer-Churn.csv",
+    "sha256": "16320c9c1ec72448db59aa0a26a0b95401046bef5d02fd3aeb906448e3055e91",
+    "row_count": 7043,
+    "column_count": 21,
+    "columns": [
+      "customerID",
+      "gender",
+      "SeniorCitizen",
+      "Partner",
+      "Dependents",
+      "tenure",
+      "PhoneService",
+      "MultipleLines",
+      "InternetService",
+      "OnlineSecurity",
+      "OnlineBackup",
+      "DeviceProtection",
+      "TechSupport",
+      "StreamingTV",
+      "StreamingMovies",
+      "Contract",
+      "PaperlessBilling",
+      "PaymentMethod",
+      "MonthlyCharges",
+      "TotalCharges",
+      "Churn"
+    ],
+    "target_counts": {
+      "No": 5174,
+      "Yes": 1869
+    },
+    "target_distribution_percent": {
+      "No": 73.46,
+      "Yes": 26.54
+    }
+  },
+  "data_quality_audit": {
+    "total_rows": 7043,
+    "total_columns": 21,
+    "exact_duplicates": 0,
+    "duplicate_customer_ids": 0,
+    "null_counts": {
+      "customerID": 0,
+      "gender": 0,
+      "SeniorCitizen": 0,
+      "Partner": 0,
+      "Dependents": 0,
+      "tenure": 0,
+      "PhoneService": 0,
+      "MultipleLines": 0,
+      "InternetService": 0,
+      "OnlineSecurity": 0,
+      "OnlineBackup": 0,
+      "DeviceProtection": 0,
+      "TechSupport": 0,
+      "StreamingTV": 0,
+      "StreamingMovies": 0,
+      "Contract": 0,
+      "PaperlessBilling": 0,
+      "PaymentMethod": 0,
+      "MonthlyCharges": 0,
+      "TotalCharges": 0,
+      "Churn": 0
+    },
+    "total_charges_blank_count": 11,
+    "blank_total_charges_tenures": {
+      "0": 11
+    },
+    "all_blanks_zero_tenure": true,
+    "numeric_ranges": {
+      "tenure_min": 0.0,
+      "tenure_max": 72.0,
+      "monthly_charges_min": 18.25,
+      "monthly_charges_max": 118.75
+    }
+  },
+  "training_samples": 5634,
+  "test_samples": 1409,
+  "target_mapping": {
+    "No": 0,
+    "Yes": 1
+  },
+  "inverse_target_mapping": {
+    "0": "Not Likely to Churn",
+    "1": "Likely to Churn"
+  },
+  "raw_features": [
+    "tenure",
+    "MonthlyCharges",
+    "TotalCharges",
+    "gender",
+    "SeniorCitizen",
+    "Partner",
+    "Dependents",
+    "PhoneService",
+    "MultipleLines",
+    "InternetService",
+    "OnlineSecurity",
+    "OnlineBackup",
+    "DeviceProtection",
+    "TechSupport",
+    "StreamingTV",
+    "StreamingMovies",
+    "Contract",
+    "PaperlessBilling",
+    "PaymentMethod"
+  ],
+  "cv_performance": {
+    "model_name": "XGBoost (Weighted)",
+    "cv_roc_auc_mean": 0.8492668975210582,
+    "cv_roc_auc_std": 0.013034648625562842,
+    "cv_pr_auc_mean": 0.6704210553338175,
+    "cv_pr_auc_std": 0.022243882869568868,
+    "cv_f1_mean": 0.630790103111749,
+    "cv_f1_std": 0.020506613898994615,
+    "cv_accuracy_mean": 0.7513334100340268,
+    "cv_precision_mean": 0.5204666355622114,
+    "cv_recall_mean": 0.8006688963210703
+  },
+  "test_metrics_default_threshold": {
+    "threshold": 0.5,
+    "accuracy": 0.7473385379701917,
+    "precision": 0.515625,
+    "recall": 0.7941176470588235,
+    "f1": 0.6252631578947369,
+    "roc_auc": 0.8477460022217056,
+    "pr_auc": 0.6646368695369457,
+    "confusion_matrix": {
+      "tn": 756,
+      "fp": 279,
+      "fn": 77,
+      "tp": 297
+    },
+    "support": {
+      "negative": 1035,
+      "positive": 374,
+      "total": 1409
+    }
+  },
+  "test_metrics_optimal_threshold": {
+    "threshold": 0.54,
+    "accuracy": 0.7579843860894251,
+    "precision": 0.5303867403314917,
+    "recall": 0.7700534759358288,
+    "f1": 0.6281352235550709,
+    "roc_auc": 0.8477460022217056,
+    "pr_auc": 0.6646368695369457,
+    "confusion_matrix": {
+      "tn": 780,
+      "fp": 255,
+      "fn": 86,
+      "tp": 288
+    },
+    "support": {
+      "negative": 1035,
+      "positive": 374,
+      "total": 1409
+    }
+  }
+}
