@@ -97,3 +97,4 @@ def test_predict_endpoint_unseen_category(client, valid_payload):
     assert response.status_code == 200
     data = response.json()
     assert data["prediction"] in ["Likely to Churn", "Not Likely to Churn"]
+

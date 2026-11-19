@@ -85,3 +85,4 @@ def test_find_optimal_threshold():
     y_proba = np.array([0.2, 0.3, 0.4, 0.55, 0.65, 0.7, 0.45, 0.8])
     thresh, _ = find_optimal_threshold(y_true, y_proba, metric="f1")
     assert 0.1 <= thresh <= 0.9
+

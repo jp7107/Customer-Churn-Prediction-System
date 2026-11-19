@@ -80,3 +80,4 @@
 - **Visual:** Display the repository README.md and wrap up.
 - **Narrative:**
   > *"In summary, the system delivers an end-to-end, reproducible, leakage-safe churn prediction pipeline with verified test metrics, thorough documentation, and a working production API. Thank you for your consideration."*
+

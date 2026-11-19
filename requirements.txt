@@ -18,3 +18,4 @@ python-dotenv>=1.0.0
 # Testing & Verification
 pytest>=7.4.0
 httpx>=0.24.0
+

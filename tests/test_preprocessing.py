@@ -95,3 +95,4 @@ def test_column_preprocessor_handles_unseen_category(sample_feature_df):
     arr = preprocessor.transform(df_unseen)
     assert isinstance(arr, np.ndarray)
     assert arr.shape[0] == 2
+

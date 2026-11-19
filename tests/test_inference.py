@@ -91,3 +91,4 @@ def test_model_reload_reproducibility(sample_customer):
     
     assert out1["probability"] == out2["probability"]
     assert out1["prediction"] == out2["prediction"]
+

@@ -111,3 +111,4 @@ class ChurnPredictor:
     ) -> Dict[str, Any]:
         """Predict churn probability and classification for a single customer record."""
         return self.predict_records([record], custom_threshold=custom_threshold)[0]
+

@@ -3,11 +3,14 @@
 Cognirex Solutions AI/ML Technical Assessment
 """
 
+import time
+from collections import defaultdict
 from contextlib import asynccontextmanager
 from typing import Any, Dict, List
 from fastapi import FastAPI, HTTPException, Request, status
 from fastapi.exceptions import RequestValidationError
 from fastapi.responses import JSONResponse
+from fastapi.middleware.cors import CORSMiddleware
 
 from api.schemas import (
     BatchPredictionRequest,
@@ -22,6 +25,20 @@ from src.churn_prediction.inference import ChurnPredictor
 from src.churn_prediction.logging_config import setup_logger
 
 logger = setup_logger("churn_api")
+
+# Rate limiting: Track requests per IP
+request_counts: Dict[str, List[float]] = defaultdict(list)
+RATE_LIMIT_REQUESTS = 100  # Max requests per window
+RATE_LIMIT_WINDOW = 60  # Window in seconds
+
+# Metrics tracking
+api_metrics = {
+    "total_requests": 0,
+    "total_predictions": 0,
+    "total_errors": 0,
+    "avg_latency_ms": 0.0
+}
+latency_samples: List[float] = []
 
 # Global predictor instance
 predictor: ChurnPredictor | None = None
@@ -54,6 +71,69 @@ app = FastAPI(
     redoc_url="/redoc",
 )
 
+# Add CORS middleware
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # Configure appropriately for production
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+
+@app.middleware("http")
+async def rate_limit_and_metrics_middleware(request: Request, call_next):
+    """Rate limiting and latency tracking middleware."""
+    start_time = time.time()
+    
+    # Rate limiting check
+    client_ip = request.client.host if request.client else "unknown"
+    current_time = time.time()
+    
+    # Clean old requests outside the time window
+    request_counts[client_ip] = [
+        req_time for req_time in request_counts[client_ip]
+        if current_time - req_time < RATE_LIMIT_WINDOW
+    ]
+    
+    # Check rate limit
+    if len(request_counts[client_ip]) >= RATE_LIMIT_REQUESTS:
+        logger.warning(f"Rate limit exceeded for IP: {client_ip}")
+        return JSONResponse(
+            status_code=status.HTTP_429_TOO_MANY_REQUESTS,
+            content={
+                "detail": f"Rate limit exceeded. Maximum {RATE_LIMIT_REQUESTS} requests per {RATE_LIMIT_WINDOW} seconds."
+            }
+        )
+    
+    # Record this request
+    request_counts[client_ip].append(current_time)
+    api_metrics["total_requests"] += 1
+    
+    # Process request
+    try:
+        response = await call_next(request)
+    except Exception as exc:
+        api_metrics["total_errors"] += 1
+        logger.error(f"Request failed: {exc}", exc_info=True)
+        raise
+    
+    # Track latency
+    latency_ms = (time.time() - start_time) * 1000
+    latency_samples.append(latency_ms)
+    
+    # Keep only last 1000 samples for average
+    if len(latency_samples) > 1000:
+        latency_samples.pop(0)
+    
+    api_metrics["avg_latency_ms"] = sum(latency_samples) / len(latency_samples)
+    
+    # Add headers
+    response.headers["X-Response-Time"] = f"{latency_ms:.2f}ms"
+    response.headers["X-RateLimit-Remaining"] = str(RATE_LIMIT_REQUESTS - len(request_counts[client_ip]))
+    
+    return response
+
 
 @app.exception_handler(RequestValidationError)
 async def validation_exception_handler(request: Request, exc: RequestValidationError):
@@ -77,6 +157,20 @@ def health_check() -> HealthResponse:
         model_name=predictor.model_name if is_loaded and predictor else None,
         version="1.0.0",
     )
+
+
+@app.get("/metrics", summary="Get API performance metrics")
+def get_metrics() -> Dict[str, Any]:
+    """Return API usage and performance metrics."""
+    return {
+        "total_requests": api_metrics["total_requests"],
+        "total_predictions": api_metrics["total_predictions"],
+        "total_errors": api_metrics["total_errors"],
+        "error_rate": api_metrics["total_errors"] / max(api_metrics["total_requests"], 1),
+        "avg_latency_ms": round(api_metrics["avg_latency_ms"], 2),
+        "active_rate_limited_ips": len(request_counts),
+    }
+
 
 
 @app.get("/model-info", response_model=ModelInfoResponse, summary="Retrieve model metadata")
@@ -112,6 +206,8 @@ def predict_churn(customer: CustomerFeatures) -> PredictionResponse:
         customer_id = payload.get("customerID")
         result = predictor.predict_single(payload)
         
+        api_metrics["total_predictions"] += 1
+        
         return PredictionResponse(
             prediction=result["prediction"],
             probability=result["probability"],
@@ -141,6 +237,8 @@ def predict_churn_batch(batch: BatchPredictionRequest) -> BatchPredictionRespons
         payloads = [c.model_dump() for c in batch.customers]
         results = predictor.predict_records(payloads)
         
+        api_metrics["total_predictions"] += len(payloads)
+        
         responses: List[PredictionResponse] = []
         for p, r in zip(payloads, results):
             responses.append(
@@ -164,3 +262,4 @@ def predict_churn_batch(batch: BatchPredictionRequest) -> BatchPredictionRespons
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail="An error occurred during batch model prediction.",
         )
+

@@ -50,3 +50,4 @@ All figures have been rendered at 300 DPI into `reports/figures/`:
 4. `churn_by_tenure_cohort.png`: Churn attrition across discretized customer life stages.
 5. `churn_by_internet_techsupport.png`: Bivariate interaction of internet connection type and technical support availability.
 6. `correlation_heatmap.png`: Spearman rank correlations between numeric/engineered variables and churn.
+

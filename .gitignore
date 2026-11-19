@@ -57,3 +57,12 @@ data/processed/
 .pytest_cache/
 .coverage
 htmlcov/
+
+# Logs
+*.log
+logs/
+api.log
+
+# Assessment documents (don't commit PDF)
+*.pdf
+AIML*.pdf

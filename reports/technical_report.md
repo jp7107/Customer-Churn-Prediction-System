@@ -112,3 +112,4 @@ Because the cost of losing a customer typically dwarfs the cost of a promotional
 1. **Absence of Longitudinal Telemetry:** Current data represents a static snapshot. Real-world telecom systems benefit from time-series logs of call drops, latency spikes, and usage decline over rolling 7/14/30-day windows.
 2. **Probability Calibration:** While the ranking performance (ROC-AUC 0.848) is robust, applying Platt scaling or Isotonic Regression on a dedicated validation split would yield even more calibrated probability estimates.
 3. **Automated Retraining & Drift Detection:** Deploying Prometheus/Grafana or Evidently AI to monitor feature distribution shift (Kolmogorov-Smirnov statistics) and model prediction decay in production.
+

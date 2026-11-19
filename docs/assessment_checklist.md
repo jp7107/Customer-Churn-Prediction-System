@@ -48,3 +48,4 @@
 - [x] **All eight technical questions answered in depth** (`docs/technical_questions.md`)
 - [x] **Demo recording script prepared** (`docs/demo_script.md`)
 - [x] **Zero secrets or private contact details in public files** (`submission/submission_details.md` gitignored)
+

@@ -50,3 +50,4 @@ Feature engineering was implemented under strict ML safety constraints:
 
 - **`customerID` Exclusion:** `customerID` is an arbitrary hexadecimal string identifier assigned upon account creation. It carries zero predictive customer behavior information. Retaining it would allow tree models to memorize customer hashes. It is strictly excluded from all model pipelines and retained only as optional trace metadata in API responses.
 - **Target Exclusion:** `Churn` is mapped to binary integer format (`Yes` = 1, `No` = 0) in one centralized location and is strictly segregated from input feature matrices ($X$).
+

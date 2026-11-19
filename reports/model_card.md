@@ -75,3 +75,4 @@ The default threshold of $\tau = 0.50$ produces a high recall (79.41%) but lower
 1. **Static Cross-Sectional Nature:** The dataset lacks longitudinal timestamped time-series events (e.g., call drops, customer support ticket frequency).
 2. **Concept Drift & Market Dynamics:** Telecommunications market offers, competitor pricing, and network upgrades change over time.
 3. **Monitoring Requirements:** In a production setting, continuous monitoring of input feature drift (e.g., using Kolmogorov-Smirnov test for numeric features and Population Stability Index for categories) and prediction drift must be implemented.
+

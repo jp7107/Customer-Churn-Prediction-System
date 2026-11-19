@@ -19,3 +19,4 @@ def setup_logger(name: str = "churn_prediction", level: int = logging.INFO) -> l
         logger.addHandler(handler)
         logger.propagate = False
     return logger
+

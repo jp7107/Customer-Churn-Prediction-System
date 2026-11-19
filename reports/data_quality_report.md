@@ -52,3 +52,4 @@
 
 4. **Categorical Semantics:**
    - Values such as `No internet service` (for add-on security and streaming services) and `No phone service` (for `MultipleLines`) represent active domain semantics rather than missingness. They are explicitly preserved as distinct categories for one-hot encoding.
+

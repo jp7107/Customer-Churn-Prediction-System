@@ -81,3 +81,4 @@ flowchart TD
 - Production-grade FastAPI service exposing `/health`, `/model-info`, `/predict`, and `/predict/batch`.
 - Pydantic models validate input bounds, numeric types, and categorical strings.
 - Returns churn prediction string (`"Likely to Churn"` / `"Not Likely to Churn"`), explicit churn probability float, and decision threshold.
+
